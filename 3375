@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "address_map_arm.h"
 
-volatile int * load_ptr = (int*)0xFFC08000;
-volatile int * currVal_ptr = (int*)0xFFC08004;
-volatile int * ctrl_ptr = (int*)0xFFC8008;
-volatile int * endInterrupt_ptr = (int*)0xFFC800C;
-volatile int * interrupt_ptr = (int*)0xFFC8010;
+volatile int * load_ptr = (int*)HPS_TIMER0_BASE;
+volatile int * currVal_ptr = (int*)HPS_TIMER0_BASE+1;
+volatile int * ctrl_ptr = (int*)HPS_TIMER0_BASE+2;
+volatile int * endInterrupt_ptr = (int*)HPS_TIMER0_BASE+3;
+volatile int * interrupt_ptr = (int*)HPS_TIMER0_BASE+4;
 volatile int * hex_ptr = (int*)HEX3_HEX0_BASE;
 volatile int * hex_ptr2 = (int*)HEX5_HEX4_BASE;
 volatile int * button_ptr = (int*)KEY_BASE;
@@ -17,7 +17,6 @@ void start()
     int count3 = 0;
     int count4 = 0;
     int count5 = 0;
-    int count6 = 0;
     int lookUpTable[10];
     lookUpTable[0] = 0x3F;
     lookUpTable[1] = 0x6;
@@ -35,40 +34,42 @@ void start()
         *(ctrl_ptr) &= 0x000;
         *(load_ptr) |= 0xF4240;
         *(ctrl_ptr) |= 0b11;
-    
+		
+		*(hex_ptr) = 0x3F;
+		*(hex_ptr)+1 = 0x3F;
+		*(hex_ptr)+2 = 0x3F;
+		*(hex_ptr)+3 = 0x3F;
+		*(hex_ptr2) = 0x3F;
+		*(hex_ptr2)+1 = 0x3F;
+		
         if(*(interrupt_ptr) == 1)
         {
             *(hex_ptr) = *lookUpTable+1;
             count++;
             if (count == 9)
             {
-                *(hex_ptr+1) = *lookUpTable+1;
+                *(hex_ptr)+1 = *lookUpTable+1;
                 count = 0;
                 count2++;
                 if(count2 == 9)
                 {
-                    *(hex_ptr+2) = *lookUpTable+1;
+                    *(hex_ptr+2)+2 = *lookUpTable+1;
                     count2 = 0;
                     count3++;
                     if(count3 == 0)
                     {
-                        *(hex_ptr+3) = *lookUpTable+1;
+                        *(hex_ptr)+3 = *lookUpTable+1;
                         count3 = 0;
                         count4++;
                         if(count4 == 9)
                         {
-                            *(hex_ptr+4) = *lookUpTable+1;
+                            *(hex_ptr2) = *lookUpTable+1;
                             count4 = 0;
                             count5++;
                             if(count5 == 9)
                             {
-                                *(hex_ptr2) = *lookUpTable+1;
+                                *(hex_ptr2)+1 = *lookUpTable+1;
                                 count5 = 0;
-                                count6++;
-                                if(count6 == 9)
-                                {
-                                    *(hex_ptr2+1) = *lookUpTable+1;
-                                }
                             }
                         }
                     }
@@ -92,7 +93,28 @@ void stop()
 }
 
 
-int main(int argc, const char * argv[]) {
+int main(void) {
+
+	while(1)
+	{
+		
+		if(*(button_ptr) == 1 && *(button_ptr)+1 == 0 && *(button_ptr)+2 == 0)
+		{
+			start();
+		}
+		else if(*(button_ptr)+1 == 1 && *(button_ptr) == 0 && *(button_ptr)+2 == 0)
+		{
+			stop();
+		}
+		else if(*(button_ptr)+2 == 1 && *(button_ptr) == 0 && *(button_ptr)+1 == 0)
+		{
+			reset();
+		}
+		else
+		{
+		}
+	
+	
+	}
     
-    return 0;
 }
