@@ -39,7 +39,7 @@ void start()
 		*(load_ptr) |= 0xF4240;
 		*(ctrl_ptr) |= 0b011;
 
-		if (*(interrupt_ptr) &= 0b1 == 1)
+		if ((*(interrupt_ptr) &= 0b1) == 1)
 		{
 			*(hex_ptr) = *lookUpTable + 1;
 			count++;
