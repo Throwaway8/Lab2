@@ -1,5 +1,5 @@
 #include "address_map_arm.h"
-
+// stop watch on DE10 standard
 volatile int * load_ptr = (int*)HPS_TIMER0_BASE;
 volatile int * currVal_ptr = (int*)HPS_TIMER0_BASE + 1;
 volatile int * ctrl_ptr = (int*)HPS_TIMER0_BASE + 2;
@@ -126,17 +126,17 @@ int main(void) {
 		if ((*(Key_ptr) &= 1) == 1) 
 		{
 			start();
-			*(Key_ptr) &= 0x0;
+			
 		}
 		else if ((*(Key_ptr) &= 2) == 1)
 		{
 			stop();
-			*(Key_ptr) &= 0x0;
+		
 		}
 		else if ((*(Key_ptr) &= 4) == 1)
 		{
 			reset();
-			*(Key_ptr) &= 0x0;
+			
 		}
 		else
 		{
