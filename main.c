@@ -6,10 +6,10 @@ int ms1, ms2, s1, s2, m1, m2 = 0;
 int running = 0;
 volatile int DELAY_LENGTH = 700000;
 volatile unsigned char * Hex_ptr = (unsigned char*)HEX3_HEX0_BASE;
-volatile int * Hex_ptr2 = (int*)HEX3_HEX0_BASE+1;
-volatile int * Hex_ptr3 = (int*)HEX3_HEX0_BASE+2;
-volatile int * Hex_ptr4 = (int*)HEX5_HEX4_BASE ;
-volatile int* led = (int*)LED_BASE;
+volatile unsigned char * Hex_ptr2 = (unsigned char*)HEX3_HEX0_BASE+1;
+volatile unsigned char * Hex_ptr3 = (unsigned char*)HEX3_HEX0_BASE+2;
+volatile unsigned int * Hex_ptr4 = (unsigned int*)HEX5_HEX4_BASE ;
+volatile unsigned char* led = (unsigned int*)LED_BASE;
 
 void config_HPS_timer()
 {
